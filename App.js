@@ -1,39 +1,67 @@
-import { StatusBar } from 'expo-status-bar';
+import { useState, useEffect, Suspense } from 'react';
+import { firebase } from './config';
 import { StyleSheet, Text, View } from 'react-native';
-import  { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import LoginScreen from './screens/LoginScreen';
-import RegisterScreen from './screens/RegisterScreen';
-import HomeScreen from './screens/HomeScreen';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import WelcomeScreen from './screens/Dashboard';
+import Login from './screens/Login';
+import Register from './screens/Registration';
+import Dashboard from './screens/Dashboard';
+import Registration from './screens/Registration';
 
-const Stack = createStackNavigator();
+const Stack = createNativeStackNavigator();
 
-const globalScreenOptions = {
-  headerStyle: { backgroundColor: "#FA8072" },
-  headerTitleStyle: { color: "white" },
-  headerTintColor: "white",
-}
+function App() {
+  const [initializing, setInitializing] = useState(true);
+  const [user, setUser] = useState();
 
-export default function App() {
-  return (
-    <NavigationContainer>
-      <Stack.Navigator screenOptions={globalScreenOptions}>
+  // Handle user state changes
+  function onAuthStateChanged(user) {
+    setUser(user);
+    if (initializing) setInitializing(false);
+  }
+
+  useEffect(() => {
+    const subscriber = firebase.auth().onAuthStateChanged(onAuthStateChanged);
+    return subscriber
+  },[])
+
+  if (initializing) return null;
+
+  if (!user){
+    return (
+      <Stack.Navigator>
         <Stack.Screen 
-          name="Login"
-          component={LoginScreen}
+          name="Login" 
+          component={Login}
+          options={{headerShown: false}} 
         />
         <Stack.Screen 
-          name="Register"
-          component={RegisterScreen}
-        />
-        <Stack.Screen
-          name="Home"
-          component={HomeScreen}
+          name="Registration" 
+          component={Registration}
+          options={{headerShown: false}} 
         />
       </Stack.Navigator>
-    </NavigationContainer>
+    )
+  }
 
+  return (
+      <Stack.Navigator>
+        <Stack.Screen 
+          name="Dashboard" 
+          component={Dashboard}
+          options={{headerShown: false}} 
+        />
+      </Stack.Navigator>
   );
+}
+
+export default () => {
+  return (
+    <NavigationContainer>
+        <App />
+    </NavigationContainer>
+  )
 }
 
 const styles = StyleSheet.create({
