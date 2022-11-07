@@ -4,21 +4,40 @@ import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { useNavigation } from '@react-navigation/native';
 import { firebase } from '../config';
+import { useDispatch } from 'react-redux';
+import { auth } from '../config';
+import { login } from "../slices/userSlice";
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
+  
+  const dispatch = useDispatch();
   const navigation = useNavigation();
 
-  loginUser = async (email, password) => {
-    try {
-      await firebase.auth().signInWithEmailAndPassword(email, password)
-    }
-    catch (error){
-      alert(error.message)
-    }
+  const loginUser = () =>  {
+
+
+    auth.signInWithEmailAndPassword(email, password)
+    .then(userAuth =>  {
+      dispatch(
+        login({
+          email: userAuth.user.email,
+
+        })
+      )
+    }).catch((error) => alert(error));
+    
   }
+
+  // loginUser = async (email, password) => {
+  //   try {
+  //     await firebase.auth().signInWithEmailAndPassword(email, password)
+  //   }
+  //   catch (error){
+  //     alert(error.message)
+  //   }
+  // }
 
   return (
     <KeyboardAvoidingView enabled behavior='padding' style={styles.container}>
@@ -85,39 +104,43 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
+    // justifyContent: 'center',
+    paddingTop: 195
   },
   text: {
     textAlign: 'center', 
   },
   welcome: {
     textAlign: 'center',
-    fontSize: 50,
+    fontSize: 40,
   },
   inputContainer: {
     width: 275,
     height: 175,
     borderColor: 'black',
-    borderWidth: 2,
+    // borderWidth: 2,
     paddingTop: 10,
   },
   inputField: {
     borderColor: 'black',
-    borderWidth: 2,
+    borderWidth: 1,
+    // paddingTop: 30,
     padding: 4,
   },
   buttonContainer: {
     flexDirection: 'row',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    paddingTop: 10,
   },
   buttons: {
     backgroundColor: 'blue',
     height: 30,
-    width: 100,
+    width: 90,
     textDecorationColor: 'white',
-    marginTop: -10,
+    marginTop: 0,
     padding: 5,
-    borderRadius: 20,
+    margin: 8,
+    borderRadius: 15,
     alignItems: 'center',
   },
   buttonText: {

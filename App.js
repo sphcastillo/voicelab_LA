@@ -3,11 +3,12 @@ import { firebase } from './config';
 import { StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import WelcomeScreen from './screens/Dashboard';
 import Login from './screens/Login';
-import Register from './screens/Registration';
 import Dashboard from './screens/Dashboard';
 import Registration from './screens/Registration';
+import { Provider } from "react-redux";
+import { store } from "./store";
+import Header from './components/Header';
 
 const Stack = createNativeStackNavigator();
 
@@ -34,12 +35,13 @@ function App() {
         <Stack.Screen 
           name="Login" 
           component={Login}
-          options={{headerShown: false}} 
         />
         <Stack.Screen 
           name="Registration" 
           component={Registration}
-          options={{headerShown: false}} 
+          options={{
+            headerTitle: () => <Header name=""/>
+          }} 
         />
       </Stack.Navigator>
     )
@@ -58,9 +60,11 @@ function App() {
 
 export default () => {
   return (
-    <NavigationContainer>
-        <App />
-    </NavigationContainer>
+    <Provider store={store}>
+      <NavigationContainer>
+          <App />
+      </NavigationContainer>
+    </Provider>
   )
 }
 
