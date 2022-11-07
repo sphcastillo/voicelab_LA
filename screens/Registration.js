@@ -2,7 +2,9 @@ import { StyleSheet, Text, View, SafeAreaView, KeyboardAvoidingView, StatusBar, 
 import React, { useState } from 'react';
 import { Image, Button, Input} from "@rneui/themed";
 import { useNavigation } from '@react-navigation/native';
-import { firebase } from '../config';
+import { auth, firebase } from '../config';
+import { useDispatch } from 'react-redux';
+import { login } from "../slices/userSlice";
 
 const Registration = () => {
   const [email, setEmail] = useState('');
@@ -10,19 +12,25 @@ const Registration = () => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
 
+  const dispatch = useDispatch();
   const navigation = useNavigation();
 
-  registerUser = async (email, password, firstName, lastName) => {
-    await firebase.auth().createUserWithEmailAndPassword(email, password)
-    .then(() => {
-      firebase.auth().currentUser.sendEmailVerification({
-        handleCodeInApp: true,
-        url:'https://voicelab-la-3a29d.firebaseapp.com',
+  const registerUser = (email, password, firstName, lastName) => {
+
+    auth.createUserWithEmailAndPassword(email, password)
+    .then((userAuth) => {
+      userAuth.user.updateProfile({
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
       })
       .then(() => {
-        alert('Verification Email Sent')
-      }).catch((error) => {
-        alert(error.message)
+        // push user into the redux store
+        // dispatch a login action
+        dispatch(login({
+          email: userAuth.user.email,
+
+        }))
       })
       .then(() => {
         firebase.firestore().collection('users')
@@ -33,14 +41,49 @@ const Registration = () => {
           email,
         })
       })
-      .catch((error) => {
-        alert(error.message)
-      })  
-    })
-    .catch((error) => {
-      alert(error.message)
-    })
+      .then(() => {
+        firebase.auth().currentUser.sendEmailVerification({
+          handleCodeInApp: true,
+          url:'https://voicelab-la-3a29d.firebaseapp.com',
+        })
+        .then(() => {
+          alert('Verification email sent!')
+        }).catch((error) => {
+          alert(error.message)
+        })
+      })
+    }).catch(error => alert("Something went wrong", error));
   }
+
+  // registerUser = async (email, password, firstName, lastName) => {
+  //   await firebase.auth().createUserWithEmailAndPassword(email, password)
+  //   .then(() => {
+  //     firebase.auth().currentUser.sendEmailVerification({
+  //       handleCodeInApp: true,
+  //       url:'https://voicelab-la-3a29d.firebaseapp.com',
+  //     })
+  //     .then(() => {
+  //       alert('Verification Email Sent')
+  //     }).catch((error) => {
+  //       alert(error.message)
+  //     })
+  //     .then(() => {
+  //       firebase.firestore().collection('users')
+  //       .doc(firebase.auth().currentUser.uid)
+  //       .set({
+  //         firstName,
+  //         lastName,
+  //         email,
+  //       })
+  //     })
+  //     .catch((error) => {
+  //       alert(error.message)
+  //     })  
+  //   })
+  //   .catch((error) => {
+  //     alert(error.message)
+  //   })
+  // }
 
 
   return (
@@ -119,21 +162,21 @@ const styles = StyleSheet.create({
     width: 275,
     height: 300,
     borderColor: 'black',
-    borderWidth: 2,
+    // borderWidth: 2,
     paddingTop: 10,
 
   },
   inputField: {
     borderColor: 'black',
-    borderWidth: 2,
-    padding: 4,
+    borderWidth: 1,
+    padding: 5,
   },
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'center'
   },
   buttons: {
-    backgroundColor: 'blue',
+    backgroundColor: 'skyblue',
     height: 30,
     width: 100,
     textDecorationColor: 'white',

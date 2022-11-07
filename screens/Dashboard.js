@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
   },
   hello: {
     fontSize: 18,
-    color: 'green',
+    color: 'steelblue',
     fontWeight: 'bold',
   },
   welcome: {
