@@ -9,10 +9,15 @@ import Registration from './screens/Registration';
 import { Provider } from "react-redux";
 import { store } from "./store";
 import Header from './components/Header';
+import { useFonts } from 'expo-font';
 
 const Stack = createNativeStackNavigator();
 
 function App() {
+  const [fontsLoaded] = useFonts({
+    'Nunito': require('./assets/fonts/NunitoSans-SemiBold.ttf'),
+    // 'Nunito-SemiBold': require('./assets/fonts/NunitoSans-SemiBold.ttf')
+  })
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState();
 
@@ -31,10 +36,14 @@ function App() {
 
   if (!user){
     return (
-      <Stack.Navigator>
+      <Stack.Navigator
+      >
+        
         <Stack.Screen 
+        options={{headerShown: false}}
           name="Login" 
           component={Login}
+          
         />
         <Stack.Screen 
           name="Registration" 
@@ -62,7 +71,7 @@ export default () => {
   return (
     <Provider store={store}>
       <NavigationContainer>
-          <App />
+          <App/>
       </NavigationContainer>
     </Provider>
   )
@@ -70,9 +79,5 @@ export default () => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
 });
