@@ -15,7 +15,7 @@ const Stack = createNativeStackNavigator();
 
 function App() {
   const [fontsLoaded] = useFonts({
-    'Nunito': require('./assets/fonts/NunitoSans-SemiBold.ttf'),
+    'Nunito': require('./assets/fonts/Nunito.ttf'),
     // 'Nunito-SemiBold': require('./assets/fonts/NunitoSans-SemiBold.ttf')
   })
   const [initializing, setInitializing] = useState(true);
@@ -26,6 +26,7 @@ function App() {
     setUser(user);
     if (initializing) setInitializing(false);
   }
+  
 
   useEffect(() => {
     const subscriber = firebase.auth().onAuthStateChanged(onAuthStateChanged);
