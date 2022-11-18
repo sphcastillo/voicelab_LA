@@ -30,14 +30,18 @@ const Login = () => {
     
   }
 
-  // loginUser = async (email, password) => {
-  //   try {
-  //     await firebase.auth().signInWithEmailAndPassword(email, password)
-  //   }
-  //   catch (error){
-  //     alert(error.message)
-  //   }
-  // }
+
+  // reset password
+
+  const resetPassword  = () => {
+    firebase.auth().sendPasswordResetEmail(firebase.auth().currentUser.email)
+    .then(() => {
+      alert('Password reset email sent!')
+    }).catch((error) => {
+      alert(error.message)
+    })
+  }
+
 
   return (
     <KeyboardAvoidingView enabled behavior='padding' style={styles.container}>
@@ -92,6 +96,14 @@ const Login = () => {
               <Text style={styles.buttonText}>Register</Text>
             </TouchableOpacity>
           </View>
+          <View>
+            <TouchableOpacity 
+              style={styles.forgotPasswordContainer}
+              onPress={() => resetPassword()}
+            >
+              <Text style={styles.forgotPassword}>Forgot Password?</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </SafeAreaView>
     </KeyboardAvoidingView>
@@ -105,7 +117,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     // justifyContent: 'center',
-    paddingTop: 195
+    paddingTop: 165
   },
   text: {
     textAlign: 'center', 
@@ -147,5 +159,16 @@ const styles = StyleSheet.create({
     color: 'white',
     alignContent: 'center',
     
+  },
+  forgotPasswordContainer: {
+    // flex: 1,
+    alignItems: 'center',
+    paddingTop: 10
+    // justifyContent: 'center',
+  },
+  forgotPassword: {
+    fontSize: 14,
+    fontWeight: "bold"
   }
+
 })

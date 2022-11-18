@@ -55,36 +55,6 @@ const Registration = () => {
     }).catch(error => alert("Something went wrong", error));
   }
 
-  // registerUser = async (email, password, firstName, lastName) => {
-  //   await firebase.auth().createUserWithEmailAndPassword(email, password)
-  //   .then(() => {
-  //     firebase.auth().currentUser.sendEmailVerification({
-  //       handleCodeInApp: true,
-  //       url:'https://voicelab-la-3a29d.firebaseapp.com',
-  //     })
-  //     .then(() => {
-  //       alert('Verification Email Sent')
-  //     }).catch((error) => {
-  //       alert(error.message)
-  //     })
-  //     .then(() => {
-  //       firebase.firestore().collection('users')
-  //       .doc(firebase.auth().currentUser.uid)
-  //       .set({
-  //         firstName,
-  //         lastName,
-  //         email,
-  //       })
-  //     })
-  //     .catch((error) => {
-  //       alert(error.message)
-  //     })  
-  //   })
-  //   .catch((error) => {
-  //     alert(error.message)
-  //   })
-  // }
-
 
   return (
     <KeyboardAvoidingView enabled behavior='padding' style={styles.container}>
