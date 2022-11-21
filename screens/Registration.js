@@ -60,8 +60,12 @@ const Registration = () => {
     <KeyboardAvoidingView enabled behavior='padding' style={styles.container}>
       <SafeAreaView style={styles.container}>
         <StatusBar style="light" />
-        <Text>Register</Text>
-        <Text>VoiceLabLA</Text>
+        <Text style={styles.text}>
+          Register
+          {"\n"} 
+          VoiceLabLA
+          </Text>
+
 
 
         <View style={styles.inputContainer}>
@@ -124,9 +128,13 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: '#05353B'
   },
   text: {
     textAlign: 'center', 
+    fontSize: 22,
+    color: 'white',
+    fontWeight: '600',
   },
   inputContainer: {
     width: 275,
@@ -134,9 +142,12 @@ const styles = StyleSheet.create({
     borderColor: 'black',
     // borderWidth: 2,
     paddingTop: 10,
+    
 
   },
   inputField: {
+    backgroundColor: 'white',
+    color: 'black',
     borderColor: 'black',
     borderWidth: 1,
     padding: 5,
@@ -146,18 +157,20 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   buttons: {
-    backgroundColor: 'skyblue',
-    height: 30,
-    width: 100,
+    backgroundColor: '#05353B',
+    height: 40,
+    width: 130,
     textDecorationColor: 'white',
     marginTop: -10,
     padding: 5,
     borderRadius: 20,
     alignItems: 'center',
+    justifyContent: 'center',
   },
   buttonText: {
     color: 'white',
     alignContent: 'center',
+    fontSize: 18,
     
   }
 })

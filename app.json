@@ -2,7 +2,7 @@
   "expo": {
     "name": "voicelab_la",
     "slug": "voicelab_la",
-    "version": "1.0.0",
+    "version": "1.0.01",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -18,7 +18,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "VoiceLabLA"
     },
     "android": {
       "adaptiveIcon": {
@@ -28,6 +29,11 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "6eeebf2c-bc01-49f3-a556-552a9cb86548"
+      }
     }
   }
 }

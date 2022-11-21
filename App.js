@@ -6,13 +6,19 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Login from './screens/Login';
 import Dashboard from './screens/Dashboard';
 import Registration from './screens/Registration';
+import ForgotPassword from './screens/ForgotPassword';
 import { Provider } from "react-redux";
 import { store } from "./store";
 import Header from './components/Header';
+import { useFonts } from 'expo-font';
 
 const Stack = createNativeStackNavigator();
 
 function App() {
+  const [fontsLoaded] = useFonts({
+    'Nunito': require('./assets/fonts/Nunito.ttf'),
+    // 'Nunito-SemiBold': require('./assets/fonts/NunitoSans-SemiBold.ttf')
+  })
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState();
 
@@ -21,6 +27,7 @@ function App() {
     setUser(user);
     if (initializing) setInitializing(false);
   }
+  
 
   useEffect(() => {
     const subscriber = firebase.auth().onAuthStateChanged(onAuthStateChanged);
@@ -31,10 +38,14 @@ function App() {
 
   if (!user){
     return (
-      <Stack.Navigator>
+      <Stack.Navigator
+      >
+        
         <Stack.Screen 
+          options={{headerShown: false}}
           name="Login" 
           component={Login}
+          
         />
         <Stack.Screen 
           name="Registration" 
@@ -43,6 +54,13 @@ function App() {
             headerTitle: () => <Header name=""/>
           }} 
         />
+
+        <Stack.Screen 
+          options={{headerShown: false}}
+          name='ForgotPassword'
+          component={ForgotPassword}
+        />
+
       </Stack.Navigator>
     )
   }
@@ -62,7 +80,7 @@ export default () => {
   return (
     <Provider store={store}>
       <NavigationContainer>
-          <App />
+          <App/>
       </NavigationContainer>
     </Provider>
   )
@@ -70,9 +88,5 @@ export default () => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
 });
