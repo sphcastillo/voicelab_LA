@@ -30,7 +30,6 @@ const Login = () => {
     
   }
 
-
   return (
     <KeyboardAvoidingView>
       <ImageBackground source={require('../assets/amy.jpeg')} style={styles.backgroundImage}>
@@ -73,12 +72,22 @@ const Login = () => {
             >
               <Text style={styles.buttonText}>Login</Text>
             </TouchableOpacity>
+
             <TouchableOpacity 
               style={styles.buttons}
               title="Go to SignUp"
               onPress={() => navigation.navigate('Registration')}
             >
               <Text style={styles.buttonText}>Register</Text>
+            </TouchableOpacity>
+          </View>
+
+          <View>
+            <TouchableOpacity 
+              style={styles.forgotPasswordContainer}
+              onPress={() => navigation.navigate('ForgotPassword')} 
+            >
+              <Text style={styles.forgotPassword}>Forgot Password?</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -137,6 +146,10 @@ const styles = StyleSheet.create({
     alignContent: 'center',
     fontSize: 18,
     
+  },
+
+  forgotPassword: {
+    color: 'white',
   },
   backgroundImage: {
     resizeMode: 'cover',

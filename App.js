@@ -6,6 +6,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Login from './screens/Login';
 import Dashboard from './screens/Dashboard';
 import Registration from './screens/Registration';
+import ForgotPassword from './screens/ForgotPassword';
 import { Provider } from "react-redux";
 import { store } from "./store";
 import Header from './components/Header';
@@ -41,7 +42,7 @@ function App() {
       >
         
         <Stack.Screen 
-        options={{headerShown: false}}
+          options={{headerShown: false}}
           name="Login" 
           component={Login}
           
@@ -53,6 +54,13 @@ function App() {
             headerTitle: () => <Header name=""/>
           }} 
         />
+
+        <Stack.Screen 
+          options={{headerShown: false}}
+          name='ForgotPassword'
+          component={ForgotPassword}
+        />
+
       </Stack.Navigator>
     )
   }
