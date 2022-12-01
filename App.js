@@ -11,6 +11,9 @@ import { Provider } from "react-redux";
 import { store } from "./store";
 import Header from './components/Header';
 import { useFonts } from 'expo-font';
+import ProfileScreen from './screens/ProfileScreen';
+import EditProfileScreen from './screens/EditProfileScreen';
+import SettingsScreen from './screens/SettingsScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -38,9 +41,8 @@ function App() {
 
   if (!user){
     return (
-      <Stack.Navigator
-      >
-        
+      <Stack.Navigator>
+        <Stack.Group>
         <Stack.Screen 
           options={{headerShown: false}}
           name="Login" 
@@ -60,18 +62,26 @@ function App() {
           name='ForgotPassword'
           component={ForgotPassword}
         />
-
+        </Stack.Group>
       </Stack.Navigator>
     )
   }
 
-  return (
+  else return (
       <Stack.Navigator>
+        <Stack.Group>
         <Stack.Screen 
           name="Dashboard" 
           component={Dashboard}
           options={{headerShown: false}} 
         />
+        </Stack.Group>
+        <Stack.Group screenOptions={{presentation: 'modal'}}>
+          <Stack.Screen options={{ headerShown:'false'}} name="ProfileModal" component={ProfileScreen}/>
+          <Stack.Screen options={{ headerShown:'false'}} name="EditProfileModal" component={EditProfileScreen}/>
+          <Stack.Screen options={{ headerShown:'false'}} name="SettingsModal" component={SettingsScreen}/>
+      </Stack.Group>
+      
       </Stack.Navigator>
   );
 }
