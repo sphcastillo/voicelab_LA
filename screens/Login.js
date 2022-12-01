@@ -6,6 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
 import { auth } from '../config';
 import { login } from "../slices/userSlice";
+import { firebase } from '../config';
 
 
 const Login = () => {
@@ -16,16 +17,27 @@ const Login = () => {
   const navigation = useNavigation();
 
   const loginUser = () =>  {
-
-
-    auth.signInWithEmailAndPassword(email, password)
+    auth.signInWithEmailAndPassword(email, password) 
     .then(userAuth =>  {
+      console.log(userAuth)
       dispatch(
         login({
           email: userAuth.user.email,
 
         })
       )
+      firebase.firestore().collection('users')
+    .doc(firebase.auth().currentUser.uid).get()
+    .then((snapshot) => {
+      if(snapshot.exists){
+        // setName(snapshot.data())
+        console.log(snapshot)
+      }
+      else {
+        console.log('user does not exist')
+      }
+    })
+
     }).catch((error) => alert(error));
     
   }
