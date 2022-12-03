@@ -142,8 +142,6 @@ const styles = StyleSheet.create({
     borderColor: 'black',
     // borderWidth: 2,
     paddingTop: 10,
-    
-
   },
   inputField: {
     backgroundColor: 'white',
