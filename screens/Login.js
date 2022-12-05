@@ -5,7 +5,7 @@ import { StatusBar } from 'expo-status-bar';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
 import { auth } from '../config';
-import { login } from "../slices/userSlice";
+import { login } from "../actions/auth";
 
 
 const Login = () => {
@@ -16,7 +16,6 @@ const Login = () => {
   const navigation = useNavigation();
 
   const loginUser = () =>  {
-
 
     auth.signInWithEmailAndPassword(email, password)
     .then(userAuth =>  {

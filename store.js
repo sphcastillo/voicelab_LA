@@ -1,8 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
-import userReducer from "./slices/userSlice";
+import { applyMiddleware } from "redux";
+import thunk from 'redux-thunk';
+import authReducer from "./reducers/auth";
 
-export const store = configureStore({
-    reducer: {
-        user: userReducer,
-    },
-});
+const middleware = [thunk];
+const store = configureStore(
+    authReducer,
+    applyMiddleware(...middleware)
+);
+
+export default store;
