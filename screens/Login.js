@@ -5,7 +5,7 @@ import { StatusBar } from 'expo-status-bar';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
 import { auth } from '../config';
-import { login } from "../actions/auth";
+import { login } from "../slices/userSlice";
 
 
 const Login = () => {

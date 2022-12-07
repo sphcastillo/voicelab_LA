@@ -4,7 +4,7 @@ import { Image, Button, Input} from "@rneui/themed";
 import { useNavigation } from '@react-navigation/native';
 import { auth, firebase } from '../config';
 import { useDispatch } from 'react-redux';
-import { login } from "../actions/auth";
+import { login } from "../slices/userSlice";
 
 const Registration = () => {
   const [email, setEmail] = useState('');
