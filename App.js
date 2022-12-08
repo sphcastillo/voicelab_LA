@@ -3,7 +3,6 @@ import { firebase } from './config';
 import { StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Login from './screens/Login';
 import Dashboard from './screens/Dashboard';
 import Registration from './screens/Registration';
 import ForgotPassword from './screens/ForgotPassword';
@@ -14,13 +13,14 @@ import { useFonts } from 'expo-font';
 import ProfileScreen from './screens/ProfileScreen';
 import EditProfileScreen from './screens/EditProfileScreen';
 import SettingsScreen from './screens/SettingsScreen';
+import  Login  from './screens/Login'
 
 const Stack = createNativeStackNavigator();
 
 function App() {
   const [fontsLoaded] = useFonts({
-    'Nunito': require('./assets/fonts/Nunito.ttf'),
-    // 'Nunito-SemiBold': require('./assets/fonts/NunitoSans-SemiBold.ttf')
+    // 'Nunito': require('./assets/fonts/Nunito.ttf'),
+    'Nunito': require('./assets/fonts/NunitoSans-SemiBold.ttf')
   })
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState();
@@ -31,13 +31,15 @@ function App() {
     if (initializing) setInitializing(false);
   }
   
-
   useEffect(() => {
     const subscriber = firebase.auth().onAuthStateChanged(onAuthStateChanged);
     return subscriber
   },[])
 
   if (initializing) return null;
+
+  if (!fontsLoaded) 
+  return null;
 
   if (!user){
     return (
