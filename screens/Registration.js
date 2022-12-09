@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, SafeAreaView, KeyboardAvoidingView, StatusBar, TouchableOpacity} from 'react-native';
 import React, { useState } from 'react';
-import { Image, Button, Input} from "@rneui/themed";
+import { Input} from "@rneui/themed";
 import { useNavigation } from '@react-navigation/native';
 import { auth, firebase } from '../config';
 import { useDispatch } from 'react-redux';
@@ -142,6 +142,8 @@ const styles = StyleSheet.create({
     borderColor: 'black',
     // borderWidth: 2,
     paddingTop: 10,
+    
+
   },
   inputField: {
     backgroundColor: 'white',
