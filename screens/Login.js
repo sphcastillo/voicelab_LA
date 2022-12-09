@@ -1,21 +1,23 @@
 import { StyleSheet, Text, View, SafeAreaView, KeyboardAvoidingView, TouchableOpacity, ImageBackground} from 'react-native';
 import { Input} from "@rneui/themed";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { useNavigation } from '@react-navigation/native';
-import { useDispatch } from 'react-redux';
 import { auth } from '../config';
 import { login } from "../slices/userSlice";
+import { useSelector, useDispatch } from 'react-redux';
+import { logIn, logOut } from ".././redux/actions";
 
-
-const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+const Login = ({naviagtion }) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   
   const dispatch = useDispatch();
-  const navigation = useNavigation();
 
   const loginUser = () =>  {
+
+    console.log("email: ", email);
+    console.log("password: ", password)
 
     auth.signInWithEmailAndPassword(email, password)
     .then(userAuth =>  {
@@ -25,7 +27,11 @@ const Login = () => {
 
         })
       )
-    }).catch((error) => alert(error));
+      navigation.replace("Dashboard")
+    }).catch((error) => {
+      alert(error);
+      navigation.replace("LoginScreen")
+    });
     
   }
 
