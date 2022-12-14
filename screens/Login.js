@@ -126,6 +126,7 @@ export default function Login({ navigation }) {
     .then((snapshot) => {
       if(snapshot.exists){
         // setName(snapshot.data())
+        navigation.navigate('Dashboard')
       }
       else {
         console.log('user does not exist')
