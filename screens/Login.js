@@ -6,6 +6,8 @@ import {
   Dimensions,
   TextInput,
   Pressable,
+  TouchableWithoutFeedback,
+  Keyboard
 } from "react-native";
 import styles from "./styles";
 import Svg, { Image, Ellipse, ClipPath } from "react-native-svg";
@@ -22,6 +24,7 @@ import Animated, {
 import { useDispatch } from 'react-redux';
 import { auth, firebase } from '../config';
 import { login } from "../slices/userSlice";
+import { KeyboardAvoidingView } from "react-native";
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -170,10 +173,17 @@ export default function Login() {
           alert(error.message)
         })
       })
-    }).catch(error => alert("Something went wrong", error));
+    }).catch(error => {
+      console.log(error)
+      alert(error, error)});
   }
 
   return (
+    <KeyboardAvoidingView
+    style={{flex: 1}}
+    behavior={Platform.OS === "ios" ? "padding" : "height"}
+    >
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
     <Animated.View style={styles.container}>
       <Animated.View style={[StyleSheet.absoluteFill, imageAnimatedStyle]}>
         <Svg height={height + 30} width={width}>
@@ -278,5 +288,7 @@ export default function Login() {
         </Animated.View>
       </View>
     </Animated.View>
+    </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 }

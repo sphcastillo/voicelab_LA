@@ -2,7 +2,7 @@
   "expo": {
     "name": "voicelab_la",
     "slug": "voicelab_la",
-    "version": "1.0.02",
+    "version": "1.0.03",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
