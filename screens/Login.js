@@ -6,6 +6,7 @@ import {
   Dimensions,
   TextInput,
   Pressable,
+  TouchableOpacity,
 } from "react-native";
 import styles from "./styles";
 import Svg, { Image, Ellipse, ClipPath } from "react-native-svg";
@@ -23,7 +24,8 @@ import { useDispatch } from 'react-redux';
 import { auth, firebase } from '../config';
 import { login } from "../slices/userSlice";
 
-export default function Login() {
+export default function Login({ navigation }) {
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [firstName, setFirstName] = useState('');
@@ -273,6 +275,17 @@ export default function Login() {
               <Text style={styles.buttonText}>
                 {isRegistering ? "REGISTER" : "LOG IN"}
               </Text>
+
+
+              {/* <TouchableOpacity 
+          style={styles.forgotPasswordContainer}
+              // onPress={() => resetPassword()}
+          onPress={() => navigation.navigate('ForgotPassword')} 
+          >
+          <Text style={styles.forgotPassword}>Forgot Password?</Text>
+        </TouchableOpacity> */}
+
+        
             </Pressable>
           </Animated.View>
         </Animated.View>
