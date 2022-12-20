@@ -21,7 +21,7 @@ import Animated, {
   withSpring
 } from "react-native-reanimated";
 import { useDispatch } from 'react-redux';
-import { auth, firebase } from '../config';
+import { auth, firebase } from '../services/config';
 import { login } from "../slices/userSlice";
 
 export default function Login({ navigation }) {
@@ -126,7 +126,7 @@ export default function Login({ navigation }) {
     .then((snapshot) => {
       if(snapshot.exists){
         // setName(snapshot.data())
-        navigation.navigate('Dashboard')
+        navigation.replace("Dashboard")
       }
       else {
         console.log('user does not exist')
