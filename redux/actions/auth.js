@@ -1,5 +1,15 @@
-import { SIGNUP_SUCCESS, SIGNUP_ERROR, LOGIN_SUCCESS, LOGIN_ERROR } from "./type";
+import { 
+    SIGNUP_SUCCESS, 
+    SIGNUP_ERROR, 
+    LOGIN_SUCCESS, 
+    LOGIN_ERROR,
+    SIGNOUT_SUCCESS,
+    SIGNOUT_ERROR,
+    RESET_PASSWORD_SUCCESS,
+    RESET_PASSWORD_ERROR
+} from "./type";
 import { auth } from "../../services/config";
+import { beginApiCall, apiCallError } from "./apiStatus";
 
 // Signing up with Firebase
 
@@ -47,6 +57,8 @@ export const signupUser = (email, password) => async dispatch => {
     
 }
 
+// Logging in with Firebase
+
 export const loginUser = (email, password, callback) => async dispatch => {
     try {
         auth().signInWithEmailandPassword(email, password)
@@ -64,6 +76,60 @@ export const loginUser = (email, password, callback) => async dispatch => {
         dispatch({
             type: LOGIN_ERROR,
             payload: "Invalid login credentials"
+        })
+    }
+};
+
+
+// Signing out with Firebase
+
+export const signoutUser = () => async dispatch => {
+    try {
+        dispatch(beginApiCall());
+        auth().signOut()
+            .then(() => {
+                dispatch({ type: SIGNOUT_SUCCESS });
+            })
+            .catch(() => {
+                dispatch(apiCallError());
+                dispatch({
+                    type: SIGNOUT_ERROR,
+                    payload: "ERROR: we're not able to sign you out. Please try again."
+                })
+            })
+    } catch (error){
+        dispatch(apiCallError());
+        dispatch({
+            type: SIGNOUT_ERROR,
+            payload: "ERROR: we're not able to sign you out. Please try again."
+        })
+    }
+};
+
+// Resetting password with Firebase
+
+export const resetPassword = email => async dispatch => {
+    try {
+        dispatch(beginApiCall());
+        auth().sendPasswordResetEmail(email)
+            .then(() => 
+                dispatch({
+                    type: RESET_PASSWORD_SUCCESS,
+                    payload: "Check your inbox: we've sent you a secured reset link by email."
+                })
+            )
+            .catch(() => {
+                dispatch(apiCallError());
+                dispatch({
+                    type: RESET_PASSWORD_ERROR,
+                    payload: "ERROR: we're not able to reset your password. Please try again."
+                })
+            })
+    } catch(error){
+        dispatch(apiCallError());
+        dispatch({
+            type: RESET_PASSWORD_ERROR,
+            payload: error
         })
     }
 };

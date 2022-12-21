@@ -1,21 +1,21 @@
 import { useNavigation } from "@react-navigation/native";
 import { View, Text,StyleSheet, Button,Pressable } from "react-native";
 import { useDispatch } from 'react-redux';
-import { logout } from "../slices/userSlice";
-import { firebase } from '../config';
+// import { logout } from "../slices/userSlice";
+// import { firebase } from '../config';
 
 function SettingsScreen() {
   
     const navigation = useNavigation();
     const dispatch = useDispatch();
 
-    const logoutUser = () =>  {
-          dispatch(
-            logout()
-          );
-        firebase.auth().signOut()
-    }
-         
+    // const logoutUser = () =>  {
+    //       dispatch(
+    //         logout()
+    //       );
+    //     firebase.auth().signOut()
+    // }
+
         
     return (
         <View style={styles.center}>

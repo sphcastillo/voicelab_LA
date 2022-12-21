@@ -1,8 +1,22 @@
-import { configureStore } from "@reduxjs/toolkit";
-import userReducer from "./slices/userSlice";
+import { configureStore, applyMiddleware } from "@reduxjs/toolkit";
+import { combineReducers } from 'redux';
+import { composeWithDevTools} from "redux-devtools-extension";
+import thunk from "redux-thunk";
+import reducer from "./redux/reducers";
 
-export const store = configureStore({
-    reducer: {
-        user: userReducer,
-    },
-});
+const middleware = [thunk];
+
+// const store = configureStore(
+//     reducer,
+//     composeWithDevTools(applyMiddleware(...middleware))
+// );
+
+const rootReducer = combineReducers({
+    authReducer: reducer
+})
+
+const store = configureStore(
+    rootReducer,
+)
+
+export default store;

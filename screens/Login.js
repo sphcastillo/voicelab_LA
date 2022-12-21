@@ -21,8 +21,8 @@ import Animated, {
   withSpring
 } from "react-native-reanimated";
 import { useDispatch } from 'react-redux';
-import { auth, firebase } from '../services/config';
-import { login } from "../slices/userSlice";
+// import { auth, firebase } from '../services/config';
+// import { login } from "../slices/userSlice";
 
 export default function Login({ navigation }) {
 
@@ -112,69 +112,69 @@ export default function Login({ navigation }) {
     }
   };
 
-  const loginUser = () =>  {
-    auth.signInWithEmailAndPassword(email, password) 
-    .then(userAuth =>  {
-      dispatch(
-        login({
-          email: userAuth.user.email,
+  // const loginUser = () =>  {
+  //   auth.signInWithEmailAndPassword(email, password) 
+  //   .then(userAuth =>  {
+  //     dispatch(
+  //       login({
+  //         email: userAuth.user.email,
 
-        })
-      )
-      firebase.firestore().collection('users')
-    .doc(firebase.auth().currentUser.uid).get()
-    .then((snapshot) => {
-      if(snapshot.exists){
-        // setName(snapshot.data())
-        navigation.replace("Dashboard")
-      }
-      else {
-        console.log('user does not exist')
-      }
-    })
+  //       })
+  //     )
+  //     firebase.firestore().collection('users')
+  //   .doc(firebase.auth().currentUser.uid).get()
+  //   .then((snapshot) => {
+  //     if(snapshot.exists){
+  //       // setName(snapshot.data())
+  //       navigation.replace("Dashboard")
+  //     }
+  //     else {
+  //       console.log('user does not exist')
+  //     }
+  //   })
 
-    }).catch((error) => alert(error));
+  //   }).catch((error) => alert(error));
     
-  }
+  // }
 
-  const RegisterUser = (email, password, firstName, lastName) => {
+  // const RegisterUser = (email, password, firstName, lastName) => {
 
-    auth.createUserWithEmailAndPassword(email, password)
-    .then((userAuth) => {
-      userAuth.user.updateProfile({
-        firstName: firstName,
-        lastName: lastName,
-        email: email,
-      })
-      .then(() => {
-        // push user into the redux store
-        // dispatch a login action
-        dispatch(login({
-          email: userAuth.user.email,
-        }))
-      })
-      .then(() => {
-        firebase.firestore().collection('users')
-        .doc(firebase.auth().currentUser.uid)
-        .set({
-          firstName,
-          lastName,
-          email,
-        })
-      })
-      .then(() => {
-        firebase.auth().currentUser.sendEmailVerification({
-          handleCodeInApp: true,
-          url:'https://voicelab-la-3a29d.firebaseapp.com',
-        })
-        .then(() => {
-          alert('Verification email sent!')
-        }).catch((error) => {
-          alert(error.message)
-        })
-      })
-    }).catch(error => alert("Something went wrong", error));
-  }
+  //   auth.createUserWithEmailAndPassword(email, password)
+  //   .then((userAuth) => {
+  //     userAuth.user.updateProfile({
+  //       firstName: firstName,
+  //       lastName: lastName,
+  //       email: email,
+  //     })
+  //     .then(() => {
+  //       // push user into the redux store
+  //       // dispatch a login action
+  //       dispatch(login({
+  //         email: userAuth.user.email,
+  //       }))
+  //     })
+  //     .then(() => {
+  //       firebase.firestore().collection('users')
+  //       .doc(firebase.auth().currentUser.uid)
+  //       .set({
+  //         firstName,
+  //         lastName,
+  //         email,
+  //       })
+  //     })
+  //     .then(() => {
+  //       firebase.auth().currentUser.sendEmailVerification({
+  //         handleCodeInApp: true,
+  //         url:'https://voicelab-la-3a29d.firebaseapp.com',
+  //       })
+  //       .then(() => {
+  //         alert('Verification email sent!')
+  //       }).catch((error) => {
+  //         alert(error.message)
+  //       })
+  //     })
+  //   }).catch(error => alert("Something went wrong", error));
+  // }
 
   return (
     <Animated.View style={styles.container}>

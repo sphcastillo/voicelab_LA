@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, KeyboardAvoidingView, SafeAreaView, TouchableOpacity } from 'react-native';
 import { Input } from '@rneui/themed';
 import React, { useState } from 'react';
-import { auth, firebase } from "../config";
+// import { auth, firebase } from "../config";
 import { useNavigation } from '@react-navigation/native';
 
 const ForgotPassword = () => {
@@ -10,17 +10,17 @@ const ForgotPassword = () => {
 
     // reset password
 
-    const resetPassword = (email) => {
-        console.log("This is the email for RESET PASSWORD: ", email);
-        auth.sendPasswordResetEmail(email)
-        .then(() => {
-            alert('Password reset email sent!')
-        }).catch((error) => {
-            alert(error.message)
-        })
+    // const resetPassword = (email) => {
+    //     console.log("This is the email for RESET PASSWORD: ", email);
+    //     auth.sendPasswordResetEmail(email)
+    //     .then(() => {
+    //         alert('Password reset email sent!')
+    //     }).catch((error) => {
+    //         alert(error.message)
+    //     })
 
-        navigation.navigate('Login');
-    }
+    //     navigation.navigate('Login');
+    // }
 
     return (
         <KeyboardAvoidingView style={styles.container}>

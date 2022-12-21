@@ -2,8 +2,8 @@ import { useNavigation } from "@react-navigation/native";
 import { View, Text, Pressable,StyleSheet, Button } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useDispatch } from 'react-redux';
-import { logout } from "../slices/userSlice";
-import { firebase } from '../config';
+// import { logout } from "../slices/userSlice";
+// import { firebase } from '../config';
 
 function ProfileScreen() {
     const navigation = useNavigation();

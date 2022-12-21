@@ -3,20 +3,20 @@ import { View, Text,StyleSheet, Button } from "react-native";
 import { Input} from "@rneui/themed";
 import { Ionicons } from "@expo/vector-icons";
 import { useDispatch } from 'react-redux';
-import { logout } from "../slices/userSlice";
-import { firebase } from '../config';
+// import { logout } from "../slices/userSlice";
+// import { firebase } from '../../';
 
 function EditProfileScreen() {
     const navigation = useNavigation();
     const dispatch = useDispatch();
 
-    const logoutUser = () =>  {
-          dispatch(
-            logout()
-          );
-        firebase.auth().signOut()
-    }
-         
+    // const logoutUser = () =>  {
+    //       dispatch(
+    //         logout()
+    //       );
+    //     firebase.auth().signOut()
+    // }
+
         
     return (
         <View style={styles.center}>

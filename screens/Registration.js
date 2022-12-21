@@ -2,9 +2,9 @@ import { StyleSheet, Text, View, SafeAreaView, KeyboardAvoidingView, StatusBar, 
 import React, { useState } from 'react';
 import { Input} from "@rneui/themed";
 import { useNavigation } from '@react-navigation/native';
-import { auth, firebase } from '../config';
+// import { auth, firebase } from '../config';
 import { useDispatch } from 'react-redux';
-import { login } from "../slices/userSlice";
+// import { login } from "../slices/userSlice";
 
 const Registration = () => {
   const [email, setEmail] = useState('');
@@ -15,45 +15,45 @@ const Registration = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
-  const registerUser = (email, password, firstName, lastName) => {
+  // const registerUser = (email, password, firstName, lastName) => {
 
-    auth.createUserWithEmailAndPassword(email, password)
-    .then((userAuth) => {
-      userAuth.user.updateProfile({
-        firstName: firstName,
-        lastName: lastName,
-        email: email,
-      })
-      .then(() => {
-        // push user into the redux store
-        // dispatch a login action
-        dispatch(login({
-          email: userAuth.user.email,
+  //   auth.createUserWithEmailAndPassword(email, password)
+  //   .then((userAuth) => {
+  //     userAuth.user.updateProfile({
+  //       firstName: firstName,
+  //       lastName: lastName,
+  //       email: email,
+  //     })
+  //     .then(() => {
+  //       // push user into the redux store
+  //       // dispatch a login action
+  //       dispatch(login({
+  //         email: userAuth.user.email,
 
-        }))
-      })
-      .then(() => {
-        firebase.firestore().collection('users')
-        .doc(firebase.auth().currentUser.uid)
-        .set({
-          firstName,
-          lastName,
-          email,
-        })
-      })
-      .then(() => {
-        firebase.auth().currentUser.sendEmailVerification({
-          handleCodeInApp: true,
-          url:'https://voicelab-la-3a29d.firebaseapp.com',
-        })
-        .then(() => {
-          alert('Verification email sent!')
-        }).catch((error) => {
-          alert(error.message)
-        })
-      })
-    }).catch(error => alert("Something went wrong", error));
-  }
+  //       }))
+  //     })
+  //     .then(() => {
+  //       firebase.firestore().collection('users')
+  //       .doc(firebase.auth().currentUser.uid)
+  //       .set({
+  //         firstName,
+  //         lastName,
+  //         email,
+  //       })
+  //     })
+  //     .then(() => {
+  //       firebase.auth().currentUser.sendEmailVerification({
+  //         handleCodeInApp: true,
+  //         url:'https://voicelab-la-3a29d.firebaseapp.com',
+  //       })
+  //       .then(() => {
+  //         alert('Verification email sent!')
+  //       }).catch((error) => {
+  //         alert(error.message)
+  //       })
+  //     })
+  //   }).catch(error => alert("Something went wrong", error));
+  // }
 
 
   return (
