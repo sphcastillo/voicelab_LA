@@ -8,76 +8,76 @@ import {
     RESET_PASSWORD_SUCCESS,
     RESET_PASSWORD_ERROR
 } from "./type";
-import { auth } from "../../services/config";
+import { auth, firebase } from "../../services/config";
 import { beginApiCall, apiCallError } from "./apiStatus";
 
 // Signing up with Firebase
 
 export const signupUser = (email, password) => async dispatch => {
+    console.log("user password: ", password)
+    console.log("user email: ", email)
+
     try {
-        auth.createUserWithEmailAndPassword(email, password)
-            .then(dataBeforeEmail => {
-                auth().onAuthStateChanged(function(user){
-                    user.sendEmailVerification();
+        dispatch(beginApiCall());
+        firebase.auth().onAuthStateChanged(function(user){
+            if(user){
+                // Sign up successful
+                dispatch({
+                    type: SIGNUP_SUCCESS,
+                    payload: "You have successfully signed up"
                 })
-            })
-            .then(dataAfterEmail => {
-                auth().onAuthStateChanged(function(user){
-                    if(user.emailVerified){
-                    // Email is verified
-                    dispatch({
-                        type: SIGNUP_SUCCESS,
-                        payload: 
-                        "Your account was successfully created! Now you need to verify your email address - please check your inbox."
-                        })
-                    }else {
-                    // Email is not verified
-                    dispatch({
-                        type: SIGNUP_ERROR,
-                        payload:
-                        "Something went wrong, we couldn't create your account. Please try again."
-                    })
-                    }
-                })
-            })
-            .catch(function(error){
+                console.log("Signup successful")
+            }else {
+                // Signup failed
                 dispatch({
                     type: SIGNUP_ERROR,
-                    payload: 
-                    "Somwthing went wrong, we couldn't create your account. Please try again."
+                    payload: "ERROR: we're not able to sign you up. Please try again"
                 })
-            })
-    } catch (error) {
+                console.log("Signup failed")
+            }
+        })
+    } catch (error){
+        dispatch(apiCallError());
         dispatch({
             type: SIGNUP_ERROR,
-            payload:
-            "Something went wrong, we couldn't create your account. Please try again."
+            payload: "ERROR: we're not able to sign you up. Please try again"
         })
+        console.log("Signup error")
     }
-    
+
+
 }
 
 // Logging in with Firebase
 
 export const loginUser = (email, password, callback) => async dispatch => {
+    console.log("inside loginUser")
     try {
-        auth().signInWithEmailandPassword(email, password)
-            .then(() => {
-                dispatch({ type: LOGIN_SUCCESS });
-                callback();
+        dispatch(beginApiCall());
+            auth().signInWithEmailAndPassword(email, password)
+            .then(data => {
+                if(data.user.emailVerified){
+                    console.log("IF", data.user.emailVerified);
+                    dispatch({ type: LOGIN_SUCCESS });
+                    callback();
+                    console.log("LOGIN_SUCCESS: Login successful")
+                }else {
+                    console.log("SIGNUP_ERROR: Login failed.")
+                    dispatch({
+                        type: LOGIN_ERROR,
+                        payload: "ERROR: we're not able to sign you in. Please try again."
+                    })
+                }
             })
-            .catch(() => {
-                dispatch({
-                    type:  LOGIN_ERROR,
-                    payload: "Invalid login credentials"
-                })
-            })
-    } catch (error) {
+    } catch(error){
+        dispatch(apiCallError());
         dispatch({
             type: LOGIN_ERROR,
-            payload: "Invalid login credentials"
+            payload: "ERROR: we're not able to sign you in. Please try again."
         })
+        console.log("Catch error; login error ")
     }
+
 };
 
 

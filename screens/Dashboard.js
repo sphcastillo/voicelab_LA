@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity } from 'react-native'
 import React, { useState, useEffect } from 'react';
-// import { firebase } from '../config';
+import { firebase } from '../services/config';
 import { Ionicons } from "@expo/vector-icons";
 import { FontAwesome5 } from '@expo/vector-icons'; 
 import { Feather } from '@expo/vector-icons';
