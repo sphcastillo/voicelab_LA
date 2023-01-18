@@ -50,63 +50,55 @@ export const signupUser = (email, password) => async dispatch => {
 
 // Logging in with Firebase
 
-export const loginUser = (email, password, callback) => async dispatch => {
+export const loginUser = (email, password) => async dispatch => {
     console.log("inside loginUser")
+    // console.log("loginUser email: ", email);
+    // console.log("loginUser password", password);
+
     try {
-        dispatch(beginApiCall());
-            auth().signInWithEmailAndPassword(email, password)
-            .then(data => {
-                if(data.user.emailVerified){
-                    console.log("IF", data.user.emailVerified);
-                    dispatch({ type: LOGIN_SUCCESS });
-                    callback();
-                    console.log("LOGIN_SUCCESS: Login successful")
-                }else {
-                    console.log("SIGNUP_ERROR: Login failed.")
-                    dispatch({
-                        type: LOGIN_ERROR,
-                        payload: "ERROR: we're not able to sign you in. Please try again."
-                    })
-                }
+        firebase.auth().signInWithEmailAndPassword(email, password)
+        .then(() => {
+            dispatch({
+                type: LOGIN_SUCCESS
             })
-    } catch(error){
-        dispatch(apiCallError());
+            console.log("LOGIN_SUCCESS: Login successful")
+        })
+    }catch(error){
         dispatch({
             type: LOGIN_ERROR,
-            payload: "ERROR: we're not able to sign you in. Please try again."
         })
-        console.log("Catch error; login error ")
+        console.log("LOGIN_ERROR: Login error: ", error)
     }
 
-};
+
+
+}
+
+
+
 
 
 // Signing out with Firebase
 
 export const signoutUser = () => async dispatch => {
-    try {
-        dispatch(beginApiCall());
-        auth().signOut()
-            .then(() => {
-                dispatch({ type: SIGNOUT_SUCCESS });
-            })
-            .catch(() => {
-                dispatch(apiCallError());
-                dispatch({
-                    type: SIGNOUT_ERROR,
-                    payload: "ERROR: we're not able to sign you out. Please try again."
-                })
-            })
-    } catch (error){
-        dispatch(apiCallError());
-        dispatch({
-            type: SIGNOUT_ERROR,
-            payload: "ERROR: we're not able to sign you out. Please try again."
-        })
-    }
-};
+    console.log("inside signoutUser")
 
-// Resetting password with Firebase
+    try {
+        firebase.auth().signOut()
+        .then(() => {
+            dispatch({
+                type: SIGNOUT_SUCCESS
+            })
+            console.log("SIGNOUT_SUCCESS: Signout successful")
+        })
+    }catch(error){
+        dispatch({
+            type: LOGIN_ERROR
+        })
+        console.log("LOGIN_ERROR: there has been a login error", error)
+    }
+}
+
 
 export const resetPassword = email => async dispatch => {
     try {

@@ -1,16 +1,19 @@
 
 import React, { useRef, useState } from "react";
 import { Text, 
-  View, StyleSheet , FlatList, Dimensions } from "react-native";
+  View, StyleSheet , FlatList, Dimensions, Pressable } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Slides from '../components/Slider/data';
 import Pagination from "../components/Slider/Pagination"
 import { Animated } from "react-native";
 import CoursesSlideItem from "../components/CoursesSlider/SlideItem";
 import { useNavigation } from "@react-navigation/native";
+import { signoutUser } from "../redux/actions/auth";
+import { useDispatch } from "react-redux";
 
 
 const Programs = () => {
+  const dispatch = useDispatch();
   const navigation = useNavigation();
   const [index, setIndex] = useState(0);
   const scrollX = useRef(new Animated.Value(0)).current;
@@ -43,14 +46,23 @@ const Programs = () => {
     itemVisiblePercentThreshold: 50,
   }).current;
 
+  const registerSignout = () => {
+    console.log("inside registerSignout")
+
+    dispatch(signoutUser());
+
+
+  }
   return (
     <View style={{ flex: 1, alignItems: "flex-start", backgroundColor: '#688496', }}>
       <View style={styles.overlay}>
         <View style={styles.header}>  
       <View style={styles.settings}>
-      <Text style={{fontSize: 18, color: "#05353B" }}>
+        <Pressable onPress={registerSignout}>
+          <Text style={{fontSize: 18, color: "#05353B" }}>
           VoiceLabLA
         </Text>
+        </Pressable>
       <Ionicons
               style={{paddingLeft: 25}}
               name="person-circle-outline"
@@ -88,7 +100,7 @@ const Programs = () => {
         onViewableItemsChanged={handleOnViewableItemsChanged}
         viewabilityConfig={viewabilityConfig}
       />
-       <Pagination data={Slides} scrollX={scrollX} index={index} />
+      <Pagination data={Slides} scrollX={scrollX} index={index} />
       </View>
       </View>
     </View>

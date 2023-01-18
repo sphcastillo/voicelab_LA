@@ -113,30 +113,25 @@ export default function Login({ navigation }) {
   };
 
   const signInUser = () =>  {
-    console.log("sign in user email: ", email);
-    console.log("sign in user password: ", password);
-    auth.signInWithEmailAndPassword(email, password) 
-    .then(userAuth =>  {
-      dispatch(
-        loginUser({
-          email: userAuth.user.email,
+    // console.log(email);
+    // console.log(password);
 
-        })
-      )
+    auth.signInWithEmailAndPassword(email, password)
+    .then(userInfo => {
       firebase.firestore().collection('users')
-    .doc(firebase.auth().currentUser.uid).get()
-    .then((snapshot) => {
-      if(snapshot.exists){
-        // setName(snapshot.data())
-        navigation.replace("Dashboard")
-      }
-      else {
-        console.log('user does not exist')
-      }
+      .doc(firebase.auth().currentUser.uid).get()
+      .then((snapshot) => {
+        if(snapshot.exists){
+          navigation.replace("Dashboard")
+          dispatch(loginUser(email, password));
+          console.log("passing user info to redux store")
+
+        }else{
+          console.log('User does not exist in database')
+        }
+      })
     })
 
-    }).catch((error) => alert(error));
-    
   }
 
   const registerUser = (email, password, firstName, lastName) => {
