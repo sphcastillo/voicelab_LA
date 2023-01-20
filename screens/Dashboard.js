@@ -6,7 +6,7 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons'; 
 import { createMaterialBottomTabNavigator } from
-    "react-navigation-material-bottom-tabs";
+    "@react-navigation/material-bottom-tabs";
     import HomeScreen from "./HomeScreen";
 import ClassesScreen from "./ClassesScreen";
 import ActivitiesScreen from "./ActivitiesScreen";
