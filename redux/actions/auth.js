@@ -14,8 +14,7 @@ import { beginApiCall, apiCallError } from "./apiStatus";
 // Signing up with Firebase
 
 export const signupUser = (email, password) => async dispatch => {
-    console.log("user password: ", password)
-    console.log("user email: ", email)
+
 
     try {
         dispatch(beginApiCall());
@@ -44,38 +43,29 @@ export const signupUser = (email, password) => async dispatch => {
         })
         console.log("Signup error")
     }
-
-
 }
 
 // Logging in with Firebase
 
 export const loginUser = (email, password) => async dispatch => {
-    console.log("inside loginUser")
-    // console.log("loginUser email: ", email);
-    // console.log("loginUser password", password);
 
     try {
         firebase.auth().signInWithEmailAndPassword(email, password)
         .then(() => {
             dispatch({
-                type: LOGIN_SUCCESS
+                type: LOGIN_SUCCESS,
+                payload: "You have successfully logged in"
             })
             console.log("LOGIN_SUCCESS: Login successful")
         })
     }catch(error){
         dispatch({
             type: LOGIN_ERROR,
+            payload: "ERROR: we're not able to log you in. Please try again"
         })
         console.log("LOGIN_ERROR: Login error: ", error)
     }
-
-
-
 }
-
-
-
 
 
 // Signing out with Firebase
@@ -87,13 +77,15 @@ export const signoutUser = () => async dispatch => {
         firebase.auth().signOut()
         .then(() => {
             dispatch({
-                type: SIGNOUT_SUCCESS
+                type: SIGNOUT_SUCCESS,
+                payload: "You have successfully signed out"
             })
             console.log("SIGNOUT_SUCCESS: Signout successful")
         })
     }catch(error){
         dispatch({
-            type: LOGIN_ERROR
+            type: SIGNOUT_ERROR,
+            payload: "ERROR: we're not able to sign you out. Please try again"
         })
         console.log("LOGIN_ERROR: there has been a login error", error)
     }

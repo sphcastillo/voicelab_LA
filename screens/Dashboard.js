@@ -94,34 +94,8 @@ const Dashboard = () => {
 
   return (
     <Navigator>
-    <HomeScreen />
-    </Navigator>
-    // <SafeAreaView style={styles.container}>
-    //   <View>
-    //     <Text style={styles.hello}>
-    //       Hello, {name.firstName}
-    //     </Text>
-    //   </View>
-    //   <View>
-    //   <Text style={styles.welcome}>
-    //     WHERE 
-    //     {"\n"} 
-    //     SCIENCE 
-    //     {"\n"} 
-    //     MEETS THE
-    //     {"\n"}
-    //     VOICE
-    //   </Text>
-    //   </View>
-    //   <TouchableOpacity
-    //     style={styles.buttons}
-    //     onPress={() => firebase.auth().signOut()}
-    //   >
-    //     <Text style={styles.buttonText}>
-    //       Logout
-    //     </Text>
-    //   </TouchableOpacity>
-    // </SafeAreaView>
+      <HomeScreen />
+    </Navigator>  
   )
 }
 

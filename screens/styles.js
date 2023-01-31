@@ -2,6 +2,9 @@ import { StyleSheet, Dimensions } from "react-native";
 const {width, height} = Dimensions.get('window');
 
 const styles = StyleSheet.create({
+  keyboardContainer: {
+    flex: 1,
+  },
   container: {
     flex: 1,
     justifyContent: 'flex-end',
@@ -90,6 +93,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 20,
     top: -20
+  },
+  forgotPasswordContainer: {
+    paddingTop: 20,
+    height: 40,
+  },
+  forgotPassword: {
+    color: '#05353B',
+    textAlign: 'center',
   }
 });
 

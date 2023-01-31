@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -6,6 +6,8 @@ import {
   Dimensions,
   TextInput,
   Pressable,
+  TouchableWithoutFeedback,
+  Keyboard,
   TouchableOpacity,
 } from "react-native";
 import styles from "./styles";
@@ -18,20 +20,21 @@ import Animated, {
   withDelay,
   runOnJS,
   withSequence,
-  withSpring
+  withSpring,
 } from "react-native-reanimated";
-import { useDispatch } from 'react-redux';
+import { useDispatch } from "react-redux";
 import { loginUser, signupUser } from "../redux/actions/auth";
-import { auth, firebase } from '../services/config';
+import { auth, firebase } from "../services/config";
+import { KeyboardAvoidingView } from "react-native";
 
 export default function Login({ navigation }) {
-
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [isClicked, setIsClicked] = useState(false)
   
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [isClicked, setIsClicked] = useState(false);
+
   const dispatch = useDispatch();
   const { height, width } = Dimensions.get("window");
   const imagePosition = useSharedValue(1);
@@ -92,12 +95,12 @@ export default function Login({ navigation }) {
 
   const formButtonAnimatedStyle = useAnimatedStyle(() => {
     return {
-      transform: [{scale: formButtonScale.value}]
-    }
-  })
+      transform: [{ scale: formButtonScale.value }],
+    };
+  });
 
   const loginHandler = () => {
-    setIsClicked(!isClicked)
+    setIsClicked(!isClicked);
     imagePosition.value = 0;
     if (isRegistering) {
       runOnJS(setIsRegistering)(false);
@@ -105,192 +108,206 @@ export default function Login({ navigation }) {
   };
 
   const registerHandler = () => {
-    setIsClicked(!isClicked)
+    setIsClicked(!isClicked);
     imagePosition.value = 0;
     if (!isRegistering) {
       runOnJS(setIsRegistering)(true);
     }
   };
 
-  const signInUser = () =>  {
-    // console.log(email);
-    // console.log(password);
-
-    auth.signInWithEmailAndPassword(email, password)
-    .then(userInfo => {
-      firebase.firestore().collection('users')
-      .doc(firebase.auth().currentUser.uid).get()
-      .then((snapshot) => {
-        if(snapshot.exists){
-          navigation.replace("Dashboard")
-          dispatch(loginUser(email, password));
-          console.log("passing user info to redux store")
-
-        }else{
-          console.log('User does not exist in database')
-        }
-      })
-    })
-
-  }
-
   const registerUser = (email, password, firstName, lastName) => {
-
-    console.log("email: ", email)
-    console.log("password: ", password)
-    console.log("firstName: ", firstName)
-    console.log("lastName: ", lastName)
-
-    auth.createUserWithEmailAndPassword(email, password)
-    .then((userAuth) => {
-      userAuth.user.updateProfile({
-        firstName: firstName,
-        lastName: lastName,
-        email: email,
+    auth
+      .createUserWithEmailAndPassword(email, password)
+      .then((userAuth) => {
+        userAuth.user
+          .updateProfile({
+            firstName: firstName,
+            lastName: lastName,
+            email: email,
+          })
+          .then(() => {
+            // push user into the redux store
+            // dispatch a login action
+            dispatch(signupUser(email, password));
+          })
+          .then(() => {
+            firebase
+              .firestore()
+              .collection("users")
+              .doc(firebase.auth().currentUser.uid)
+              .set({
+                firstName,
+                lastName,
+                email,
+              });
+          })
+          .then(() => {
+            firebase
+              .auth()
+              .currentUser.sendEmailVerification({
+                handleCodeInApp: true,
+                url: "https://voicelab-la-3a29d.firebaseapp.com",
+              })
+              .then(() => {
+                alert("Verification email sent!");
+              })
+              .catch((error) => {
+                alert(error.message);
+              });
+          });
       })
-      .then(() => {
-        // push user into the redux store
-        // dispatch a login action
-        dispatch(signupUser(email, password))
-      })
-      .then(() => {
-        firebase.firestore().collection('users')
+      .catch((error) => alert("Something went wrong", error));
+  };
+
+  const signInUser = () => {
+    auth.signInWithEmailAndPassword(email, password).then((userInfo) => {
+      firebase
+        .firestore()
+        .collection("users")
         .doc(firebase.auth().currentUser.uid)
-        .set({
-          firstName,
-          lastName,
-          email,
-        })
-      })
-      .then(() => {
-        firebase.auth().currentUser.sendEmailVerification({
-          handleCodeInApp: true,
-          url:'https://voicelab-la-3a29d.firebaseapp.com',
-        })
-        .then(() => {
-          alert('Verification email sent!')
-        }).catch((error) => {
-          alert(error.message)
-        })
-      })
-    }).catch(error => alert("Something went wrong", error));
-  }
+        .get()
+        .then((snapshot) => {
+          if (snapshot.exists) {
+            navigation.replace("Dashboard");
+            dispatch(loginUser(email, password));
+            console.log("passing user info to redux store");
+          } else {
+            console.log("User does not exist in database");
+          }
+        });
+    });
+  };
 
   return (
-    <Animated.View style={styles.container}>
-      <Animated.View style={[StyleSheet.absoluteFill, imageAnimatedStyle]}>
-        <Svg height={height + 30} width={width}>
-          <ClipPath id="clipPathId">
-            <Ellipse cx={width / 2} rx={height} ry={height + 30} />
-          </ClipPath>
-          <Image
-            href={require("../assets/amy.jpeg")}
-            width={width + 100}
-            height={height + 100}
-            preserveAspectRatio="xMidYMid slice"
-            clipPath="url(#clipPathId)"
-          />
-        </Svg>
-        <Animated.View
-          style={[styles.closeButtonContainer, closeButtonContainerStyle]}
-        >
-          <Text onPress={() => (
-            setIsClicked(!isClicked),
-            imagePosition.value = 1)}>X</Text>
-        </Animated.View>
-      </Animated.View>  
-        <Animated.View style={welcomeAnimatedStyle}>
-        <Text  style={styles.welcome}>
-          WHERE SCIENCE 
-          {"\n"} 
-          MEETS THE VOICE
-          {"\n"} 
-      </Text>
-      </Animated.View>
-      <View style={styles.bottomContainer}>
-        <Animated.View style={buttonsAnimatedStyle}>
-          <Pressable style={styles.button} onPress={loginHandler}>
-            <Text style={styles.buttonText}>LOG IN</Text>
-          </Pressable>
-        </Animated.View>
-        <Animated.View style={buttonsAnimatedStyle}>
-          <Pressable style={styles.button} onPress={registerHandler}>
-            <Text style={styles.buttonText}>REGISTER</Text>
-          </Pressable>
-        </Animated.View>
-        <Animated.View style={[styles.formInputContainer, formAnimatedStyle]}>
-          <TextInput
-            placeholder="Email"
-            placeholderTextColor="black"
-            style={styles.textInput}
-            value={email}
-            autoCapitalize='none'
-            autoCorrect={false}
-            onChangeText={(email) => setEmail(email)}
-          />
-          {isRegistering && (
-            <TextInput
-              placeholder="First Name"
-              placeholderTextColor="black"
-              style={styles.textInput}
-              type="firstName"
-              value={firstName}
-              autoCorrect={false}
-              onChangeText={(firstName) => setFirstName(firstName)}
-            />
-          )}
-          {isRegistering && (
-            <TextInput
-              placeholder="Last Name"
-              placeholderTextColor="black"
-              style={styles.textInput}
-              type="lastName"
-              value={lastName}
-              autoCorrect={false}
-              onChangeText={(lastName) => setLastName(lastName)}
-            />
-          )}
-          <TextInput
-            placeholder="Password"
-            placeholderTextColor="black"
-            value={password}
-            style={styles.textInput}
-            autoCapitalize='none'
-            autoCorrect={false}
-            secureTextEntry
-            onChangeText={(password) => setPassword(password)}
-          />
-          <Animated.View style={[styles.formButton, formButtonAnimatedStyle]}>
-            <Pressable onPress={()=>{
-              if(isRegistering) {
-                formButtonScale.value = withSequence(withSpring(1.5), withSpring(1))
-                registerUser(email, password, firstName, lastName)
-              }
-              else {
-              formButtonScale.value = withSequence(withSpring(1.5), withSpring(1))
-              signInUser(email, password)
-              }
-            }
-              
-              }>
-              <Text style={styles.buttonText}>
-                {isRegistering ? "REGISTER" : "LOG IN"}
+    <KeyboardAvoidingView
+      style={styles.keyboardContainer}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+    >
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <Animated.View style={styles.container}>
+          <Animated.View style={[StyleSheet.absoluteFill, imageAnimatedStyle]}>
+            <Svg height={height + 30} width={width}>
+              <ClipPath id="clipPathId">
+                <Ellipse cx={width / 2} rx={height} ry={height + 30} />
+              </ClipPath>
+              <Image
+                href={require("../assets/amy.jpeg")}
+                width={width + 100}
+                height={height + 100}
+                preserveAspectRatio="xMidYMid slice"
+                clipPath="url(#clipPathId)"
+              />
+            </Svg>
+            <Animated.View
+              style={[styles.closeButtonContainer, closeButtonContainerStyle]}
+            >
+              <Text
+                onPress={() => (
+                  setIsClicked(!isClicked), (imagePosition.value = 1)
+                )}
+              >
+                X
               </Text>
-
-
-              {/* <TouchableOpacity 
-          style={styles.forgotPasswordContainer}
-              // onPress={() => resetPassword()}
-          onPress={() => navigation.navigate('ForgotPassword')} 
-          >
-          <Text style={styles.forgotPassword}>Forgot Password?</Text>
-        </TouchableOpacity> */}
-
-        
-            </Pressable>
+            </Animated.View>
           </Animated.View>
+          <Animated.View style={welcomeAnimatedStyle}>
+            <Text style={styles.welcome}>
+              WHERE SCIENCE
+              {"\n"}
+              MEETS THE VOICE
+              {"\n"}
+            </Text>
+          </Animated.View>
+          <View style={styles.bottomContainer}>
+            <Animated.View style={buttonsAnimatedStyle}>
+              <Pressable style={styles.button} onPress={loginHandler}>
+                <Text style={styles.buttonText}>LOG IN</Text>
+              </Pressable>
+            </Animated.View>
+            <Animated.View style={buttonsAnimatedStyle}>
+              <Pressable style={styles.button} onPress={registerHandler}>
+                <Text style={styles.buttonText}>REGISTER</Text>
+              </Pressable>
+            </Animated.View>
+            <Animated.View
+              style={[styles.formInputContainer, formAnimatedStyle]}
+            >
+              <TextInput
+                placeholder="Email"
+                placeholderTextColor="black"
+                style={styles.textInput}
+                value={email}
+                autoCapitalize="none"
+                autoCorrect={false}
+                onChangeText={(email) => setEmail(email)}
+              />
+              {isRegistering && (
+                <TextInput
+                  placeholder="First Name"
+                  placeholderTextColor="black"
+                  style={styles.textInput}
+                  type="firstName"
+                  value={firstName}
+                  autoCorrect={false}
+                  onChangeText={(firstName) => setFirstName(firstName)}
+                />
+              )}
+              {isRegistering && (
+                <TextInput
+                  placeholder="Last Name"
+                  placeholderTextColor="black"
+                  style={styles.textInput}
+                  type="lastName"
+                  value={lastName}
+                  autoCorrect={false}
+                  onChangeText={(lastName) => setLastName(lastName)}
+                />
+              )}
+              <TextInput
+                placeholder="Password"
+                placeholderTextColor="black"
+                value={password}
+                style={styles.textInput}
+                autoCapitalize="none"
+                autoCorrect={false}
+                secureTextEntry
+                onChangeText={(password) => setPassword(password)}
+              />
+              <Animated.View
+                style={[styles.formButton, formButtonAnimatedStyle]}
+              >
+                <Pressable
+                  onPress={() => {
+                    if (isRegistering) {
+                      formButtonScale.value = withSequence(
+                        withSpring(1.5),
+                        withSpring(1)
+                      );
+                      registerUser(email, password, firstName, lastName);
+                    } else {
+                      formButtonScale.value = withSequence(
+                        withSpring(1.5),
+                        withSpring(1)
+                      );
+                      signInUser(email, password);
+                    }
+                  }}
+                >
+                  <Text style={styles.buttonText}>
+                    {isRegistering ? "REGISTER" : "LOG IN"}
+                  </Text>
+                </Pressable>
+              </Animated.View>
+              <TouchableOpacity
+                style={styles.forgotPasswordContainer}
+                onPress={() => navigation.navigate("ForgotPassword")}
+              >
+                <Text style={styles.forgotPassword}>Forgot Password?</Text>
+              </TouchableOpacity>
+            </Animated.View>
+          </View>
         </Animated.View>
-      </View>
-    </Animated.View>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 }
